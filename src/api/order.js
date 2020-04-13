@@ -23,10 +23,9 @@ export function getOrderInfoByOrderSn(orderSn) {
     })
 }
 
-export function getOrderList(keyword) {
+export function getOrderList(orderType) {
     return request({
-        url: '/order/list',
-        method: 'GET',
-        params: keyword
+        url: '/order/list?orderType=' + orderType,
+        method: 'GET'
     })
 }

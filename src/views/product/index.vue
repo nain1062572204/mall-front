@@ -71,7 +71,8 @@
                                         选择版本
                                     </div>
                                     <ul class="step-list step-one clearfix">
-                                        <li class="btn" :class="{'active':index===currentChooseProduct.index}"
+                                        <li class="btn"
+                                            :class="{'active':index===currentChooseProduct.index,'disable':sku.stock===0}"
                                             v-for="(sku,index) in product.skuStocks" :key="index"
                                             @click="changeChoose(index,sku)"
                                         >
@@ -82,49 +83,8 @@
                                                 <span class="sku-price">{{sku.price}}元</span>
                                             </a>
                                         </li>
-                                        <!--<li class="btn">
-                                            <a href="javascript:void(0)">
-                                                <span class="name">8+256GB</span>
-                                                <span class="sku-price">4599元</span>
-                                            </a>
-                                        </li>
-                                        <li class="btn">
-                                            <a href="javascript:void(0)">
-                                                <span class="name">8+256GB</span>
-                                                <span class="sku-price">4599元</span>
-                                            </a>
-                                        </li>-->
                                     </ul>
                                 </div>
-                                <!--<div class="pro-choose">
-                                    <div class="step-title">
-                                        选择颜色
-                                    </div>
-                                    <ul class="step-list step-one clearfix">
-                                        <li class="btn active">
-                                            <a href="javascript:void(0)">
-                                                <img src="https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1581494292.17763824.jpg"
-                                                     alt="">
-                                                冰海蓝
-                                            </a>
-                                        </li>
-                                        <li class="btn">
-                                            <a href="javascript:void(0)">
-                                                <img src="https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1581494292.17763824.jpg"
-                                                     alt="">
-                                                猛男粉
-                                            </a>
-                                        </li>
-                                        <li class="btn">
-                                            <a href="javascript:void(0)">
-                                                <img src="https://cdn.cnbj0.fds.api.mi-img.com/b2c-shopapi-pms/pms_1581494292.17763824.jpg"
-                                                     alt="">
-                                                渣女绿
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>-->
-                                <!--已选商品-->
                                 <div class="pro-list">
                                     <ul>
                                         <li>

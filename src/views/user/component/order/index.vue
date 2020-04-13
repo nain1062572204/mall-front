@@ -8,24 +8,11 @@
                 </h1>
                 <div class="more clearfix">
                     <ul class="filter-list">
-                        <li class="first active">
-                            <a>全部有效订单</a>
+                        <li v-for="(item,index) in orderType" :key="index"
+                            :class="{'first':index===0,'active':item.selected}"
+                        >
+                            <a href="javascript:void(0)" @click="getList(index)">{{item.title}}</a>
                         </li>
-                        <li>
-                            <a>待支付</a>
-                        </li>
-                        <li>
-                            <a>待发货</a>
-                        </li>
-                        <li>
-                            <a>待收货</a>
-                        </li>
-                        <li>
-                            <a>已关闭</a>
-                        </li>
-                        <!--<li>
-                            <a>订单回收站</a>
-                        </li>-->
 
                     </ul>
                     <form class="search-form clearfix" action="#" method="get">
@@ -47,7 +34,7 @@
                                                                        alt="垃圾桶"></div>
                             <div class="order-detail">
                                 <div class="order-summary">
-                                    <div class="order-status">等待付款</div>
+                                    <!--<div class="order-status">等待付款</div>-->
                                 </div>
                                 <table class="order-detail-table">
                                     <thead>
@@ -79,9 +66,11 @@
                                         </td>
                                         <td class="order-actions">
                                             <router-link :to="{name:'pay',params:{'orderSn':order.orderSn}}"
-                                                         class="btn btn-small btn-primary">立即付款
+                                                         v-if="order.type===1"
+                                                         class="btn btn-small btn-primary">
+                                                立即付款
                                             </router-link>
-                                            <a class="btn btn-small btn-line-gray">订单详情</a>
+                                            <a class="btn btn-small btn-line-gray" v-if="order.type!==4">订单详情</a>
                                             <a href="javascript:void(0)"
                                                class="btn btn-small btn-line-gray btn-contract">
                                                 联系客服
@@ -108,16 +97,49 @@
         data() {
             return {
                 orderList: [],
-                loading: true
+                loading: true,
+                orderType: [
+                    {
+                        title: "全部有效订单",
+                        selected: true,
+                        type: 0
+                    }, {
+                        title: "待支付",
+                        selected: false,
+                        type: 1
+                    }, {
+                        title: "待发货",
+                        selected: false,
+                        type: 2
+                    }, {
+                        title: "待收货",
+                        selected: false,
+                        type: 3
+                    }, {
+                        title: "已关闭",
+                        selected: false,
+                        type: 4
+                    }
+                ]
             }
         },
         methods: {
             //获取订单列表
-            getList() {
-                getOrderList().then((response) => {
+            getList(index) {
+                this.loading = true
+                this.orderType.map(e => {
+                    e.selected = false
+                })
+                this.orderType[index].selected = true
+                getOrderList(this.orderType[index].type).then((response) => {
                     this.loading = false
-                    window.console.log(response.data)
-                    this.orderList = response.data
+                    this.orderList = []
+                    response.data.map((item) => {
+                        this.orderList.push(
+                            Object.assign({}, item, {type: this.orderType[index].type})
+                        )
+                    })
+                    window.console.log(this.orderList)
                 })
             },
             getSpDate(value) {
@@ -127,11 +149,12 @@
                     result += values[i].value + ' '
                 }
                 return result
-            }
+            },
+
         },
         created() {
             document.title = "我的订单"
-            this.getList()
+            this.getList(0)
         }
     }
 </script>
