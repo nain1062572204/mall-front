@@ -29,3 +29,19 @@ export function getOrderList(orderType) {
         method: 'GET'
     })
 }
+
+export function deleteOrder(orderId) {
+    return request({
+        url: '/order/delete/' + orderId,
+        method: 'DELETE'
+    })
+
+}
+
+export function payOrder(params) {
+    return request({
+        url: '/order/pay',
+        method: 'POST',
+        params: params
+    })
+}

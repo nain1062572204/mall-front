@@ -91,7 +91,7 @@
                             </div>
                             <div class="payment-body">
                                 <ul class="clearfix payment-list">
-                                    <li>
+                                    <li @click="pay">
                                         <input type="radio" name="payOnlineBank" value="alipay"> <img
                                             src="../../assets/images/payOnline_zfb.png" alt="支付宝"
                                             style="margin-left: 0;"></li>
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-    import {getOrderInfoByOrderSn} from '@/api/order'
+    import {getOrderInfoByOrderSn, payOrder} from '@/api/order'
 
     export default {
         name: "checkOrder",
@@ -204,6 +204,18 @@
             timeFormat(param) {
                 return param < 10 ? '0' + param : param;
             },
+            //订单支付
+            pay() {
+                let orderSn = this.$route.params.orderSn
+                let params = new URLSearchParams();
+                params.append('orderSn', orderSn)
+                payOrder(params).then((response) => {
+                    this.$message({
+                        message: '支付成功',
+                        type: 'success'
+                    });
+                })
+            }
         },
         created() {
             document.title = "选择支付方式"

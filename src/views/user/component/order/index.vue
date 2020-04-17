@@ -30,8 +30,11 @@
                     <p class="empty" v-show="this.orderList.length===0">当前没有交易订单。</p>
                     <ul class="order-list">
                         <li class="uc-order-item uc-order-item-pay" v-for="(order,index) in orderList" :key="index">
-                            <div class="order-remove J_removeBtn"><img src="../../../../assets/images/trash.png"
-                                                                       alt="垃圾桶"></div>
+                            <div class="order-remove J_removeBtn"
+                                 v-if="order.type===4"
+                                 @click="deleteOrder(order.id)"
+                            ><img src="../../../../assets/images/trash.png"
+                                  alt="垃圾桶"></div>
                             <div class="order-detail">
                                 <div class="order-summary">
                                     <!--<div class="order-status">等待付款</div>-->
@@ -90,7 +93,7 @@
 </template>
 
 <script>
-    import {getOrderList} from '@/api/order'
+    import {getOrderList, deleteOrder} from '@/api/order'
 
     export default {
         name: "",
@@ -120,12 +123,14 @@
                         selected: false,
                         type: 4
                     }
-                ]
+                ],
+                currentOrderTypeIndex: null,
             }
         },
         methods: {
             //获取订单列表
             getList(index) {
+                this.currentOrderTypeIndex = index
                 this.loading = true
                 this.orderType.map(e => {
                     e.selected = false
@@ -140,6 +145,16 @@
                         )
                     })
                     window.console.log(this.orderList)
+                })
+            },
+            //delete order
+            deleteOrder(orderId) {
+                deleteOrder(orderId).then((response) => {
+                    this.$message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                    this.getList(this.currentOrderTypeIndex)
                 })
             },
             getSpDate(value) {
